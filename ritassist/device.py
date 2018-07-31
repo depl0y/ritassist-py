@@ -71,7 +71,6 @@ class Device:
             'last_seen': self._last_seen,
             'friendly_name': self._license_plate,
             'equipment_id': self._equipment_id,
-            ATTR_SOURCE_TYPE: SOURCE_TYPE_GPS,
             'fuel_level': self._fuel_level,
             'malfunction_light': self._malfunction_light,
             'coolant_temperature': self._coolant_temperature,
