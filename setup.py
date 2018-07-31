@@ -11,4 +11,5 @@ setup(name='ritassist',
       install_requires=[
           'requests',
       ],
+      python_requires='>=3',
       zip_safe=False)
