@@ -1,3 +1,5 @@
+from .trip import Trip
+
 class Device:
     """Entity used to store device information."""
 
@@ -76,6 +78,26 @@ class Device:
             'coolant_temperature': self._coolant_temperature,
             'power_voltage': self._power_voltage
         }
+
+    def get_trips(self, authentication_info, start, end):
+        """Get trips for this device between start and end."""
+        import requests
+
+        if (authentication_info is None or
+            not authentication_info.is_valid()):
+            return []
+
+        data_url = "https://api.ritassist.nl/api/trips/GetTrips"
+        query = f"?equipmentId={self.identifier}&from={start}&to={end}&extendedInfo=True"
+        header = authentication_info.create_header()
+        response = requests.get(data_url + query, headers=header)
+        trips = response.json()
+
+        result = []
+        for trip_json in trips:
+            trip = Trip(trip_json)
+            result.append(trip)
+        return result
 
     def get_extra_vehicle_info(self, authentication_info):
         """Get extra data from the API."""

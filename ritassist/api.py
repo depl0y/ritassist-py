@@ -1,4 +1,5 @@
 from .device import Device
+from .trip import Trip
 from .authentication import Authentication
 import requests
 
