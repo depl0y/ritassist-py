@@ -18,14 +18,17 @@ class Authentication(object):
         """Set all attributes based on JSON response."""
         import time
 
-        self.access_token = json['access_token']
-        self.refresh_token = json['refresh_token']
-        self.expires_in = json['expires_in']
+        if 'access_token' in json:
+            self.access_token = json['access_token']
+            self.refresh_token = json['refresh_token']
+            self.expires_in = json['expires_in']
 
-        if 'authenticated' in json:
-            self.authenticated = json['authenticated']
+            if 'authenticated' in json:
+                self.authenticated = json['authenticated']
+            else:
+                self.authenticated = time.time()
         else:
-            self.authenticated = time.time()
+            self.access_token = None
 
     def create_header(self):
         """Return an authorization header."""

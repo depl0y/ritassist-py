@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='ritassist',
-      version='0.3',
+      version='0.5',
       description='RitAssist API Access',
       url='http://github.com/depl0y/ritassist-py',
       author='Wim Haanstra',

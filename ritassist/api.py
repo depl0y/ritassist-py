@@ -11,7 +11,13 @@ class API:
         self._password = password
         self._authentication_info = None
 
-    def __authenticate(self):
+    def logged_in(self):
+        if (self._authentication_info is None):
+            return False
+        else:
+            return self._authentication_info.is_valid()
+
+    def login(self):
         import requests
 
         data_url = "https://api.ritassist.nl/api/session/login"
@@ -22,15 +28,17 @@ class API:
             'username': self._username,
             'password': self._password
         }
+
         response = requests.post(data_url, json=body)
 
         self._authentication_info = Authentication()
         self._authentication_info.set_json(response.json())
+        return self.logged_in()
 
     def get_devices(self):
         if (self._authentication_info is None or
             not self._authentication_info.is_valid()):
-            self.__authenticate()
+            return []
 
         data_url = "https://api.ritassist.nl/api/equipment/Getfleet"
         query = "?groupId=0&hasDeviceOnly=false"
