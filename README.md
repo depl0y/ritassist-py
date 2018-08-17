@@ -20,6 +20,9 @@ if api.login():
         for device in devices:
             print(f"{device.license_plate}: {device._make} {device._model}: {device._odo}")
 
+            # Query Open Street Map for current maximum speed and current address
+            device.get_map_details()
+
             # Gets the trips for the device, between 2018-06-04 and 2018-06-07
             trips = device.get_trips(a.authentication_info, "2018-06-04", "2018-06-07")
 
@@ -35,6 +38,15 @@ else:
 
 
 ## Versions
+### 0.9.2
+- Get country with the address
+
+### 0.9
+- Resolve maximum speed and current address using Open Street Map
+
+### 0.8
+- Several bug fixes
+
 ### 0.7
 - Version 0.7 adds access to the trips for a device
 

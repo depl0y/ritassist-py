@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='ritassist',
-      version='0.7',
+      version='0.9.2',
       description='RitAssist API Access',
       url='http://github.com/depl0y/ritassist-py',
       author='Wim Haanstra',
@@ -10,7 +10,8 @@ setup(name='ritassist',
       packages=['ritassist'],
       install_requires=[
           'requests',
-          'ciso8601'
+          'ciso8601',
+          'geopy'
       ],
       python_requires='>=3',
       zip_safe=False)
