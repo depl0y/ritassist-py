@@ -21,7 +21,7 @@ class API:
     def login(self):
         import requests
 
-        data_url = "https://api.ritassist.nl/api/session/login"
+        data_url = "https://api.fleetgo.com/api/session/login"
 
         body = {
             'client_id': self._client_id,
@@ -41,7 +41,7 @@ class API:
             not self.authentication_info.is_valid()):
             return []
 
-        data_url = "https://api.ritassist.nl/api/equipment/Getfleet"
+        data_url = "https://api.fleetgo.com/api/equipment/Getfleet"
         query = "?groupId=0&hasDeviceOnly=false"
 
         header = self.authentication_info.create_header()

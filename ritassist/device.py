@@ -74,7 +74,7 @@ class Device:
             not authentication_info.is_valid()):
             return []
 
-        data_url = "https://api.ritassist.nl/api/trips/GetTrips"
+        data_url = "https://api.fleetgo.com/api/trips/GetTrips"
         query = f"?equipmentId={self.identifier}&from={start}&to={end}&extendedInfo=True"
         header = authentication_info.create_header()
         response = requests.get(data_url + query, headers=header)
@@ -90,7 +90,7 @@ class Device:
         """Get extra data from the API."""
         import requests
 
-        base_url = "https://secure.ritassist.nl/GenericServiceJSONP.ashx"
+        base_url = "https://app.fleetgo.com/GenericServiceJSONP.ashx"
         query = "?f=CheckExtraVehicleInfo" \
                 "&token={token}" \
                 "&equipmentId={identifier}" \
@@ -124,11 +124,50 @@ class Device:
         self.speed = json_device['Speed']
         self.last_seen = json_device['Location']['DateTime']
 
+    def geocode_device(self, authentication_info):
+        import requests
+
+        if (authentication_info is None or
+            not authentication_info.is_valid()):
+            return
+
+        if (self.latitude == 0 and self.longitude == 0):
+            print("No location known")
+            return
+
+        base_url = "https://app.fleetgo.com/GenericServiceJSONP.ashx"
+        query = "?f=GeocodeToAddressDTO" \
+                "&token={token}" \
+                "&extendedInfo=true" \
+                "&lat={lat}" \
+                "&lng={lng}" \
+                "&lastHash=null&padding=false"
+
+        parameters = {
+            'token': authentication_info.access_token,
+            'lat': self.latitude,
+            'lng': self.longitude
+        }
+
+        response = requests.get(base_url + query.format(**parameters))
+        if (response.status_code != 200):
+            print("Failed to get location")
+
+        json = response.json()
+        print(json)
+        self.current_address = Address(None)
+
+        self.current_address.address = json['Address']
+        self.current_address.postal_code = json['PostalCode']
+        self.current_address.city = json['City']
+        self.current_address.country = json['Country']
+
     def get_map_details(self):
         import requests
         from .json_utils import JsonUtils
 
         if (self.latitude == 0 and self.longitude == 0):
+            print("No location known")
             return
 
         url = "https://overpass-api.de/api/interpreter"
@@ -140,6 +179,7 @@ class Device:
 
         response = requests.post(url, query)
         data = response.json()
+        print(data)
 
         way = self.get_closest_way(data)
         country = self.get_country(data)

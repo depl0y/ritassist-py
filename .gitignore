@@ -8,3 +8,4 @@
 /*.egg-info
 /*.egg
 .DS_Store
+test.py
